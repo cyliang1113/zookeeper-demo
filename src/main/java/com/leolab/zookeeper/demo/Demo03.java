@@ -1,12 +1,11 @@
 package com.leolab.zookeeper.demo;
 
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.WatchedEvent;
-import org.apache.zookeeper.Watcher;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * zookeeper 一个socket通道 是按顺序去处理的
@@ -14,7 +13,7 @@ import java.util.concurrent.CountDownLatch;
  *
  *
  */
-public class Demo01 {
+public class Demo03 {
 
 
     public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
@@ -27,5 +26,10 @@ public class Demo01 {
         });
         System.out.println("zooKeeper.getState(): " + zooKeeper.getState());
         countDownLatch.await();
+
+        String s = zooKeeper.create("/test", "test hello".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+
+        System.out.println("create: " + s);
+        LockSupport.park();
     }
 }
